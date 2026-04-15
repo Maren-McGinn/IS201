@@ -1,0 +1,152 @@
+/* --- Base --- */
+body {
+    margin: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fdf6f0; /* soft cream */
+    color: #3b3b3b; /* dark neutral for text */
+    line-height: 1.6;
+}
+
+/* --- Header --- */
+header {
+    background-color: #d88c5a; /* rustic orange */
+    color: #fdf6f0;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-family: 'Georgia', serif;
+}
+
+nav a {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #fdf6f0;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #a67c52; /* darker earthy orange */
+}
+
+/* --- Sections --- */
+main {
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+h2 {
+    color: #5f8b7b; /* earthy green */
+    border-bottom: 2px solid #d88c5a;
+    padding-bottom: 0.3rem;
+    margin-top: 2rem;
+}
+
+ul, ol {
+    margin-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+.emphasizeText {
+    font-weight: bold;
+    color: #d88c5a; /* rustic orange */
+}
+
+/* --- Paragraphs --- */
+p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: #4b4b4b;
+}
+
+/* --- Images --- */
+img {
+    display: block;
+    margin: 1rem 0;
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- Links --- */
+a {
+    color: #507788; /* cadet blue */
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #3b5c6d;
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1rem;
+    background-color: #e6e1dc; /* light cream */
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #507788;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #3b5c6d;
+}
+
+.top-banner {
+    width: 100%;
+    background-color: #d88c5a;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;            /* allows wrapping instead of overflow */
+    box-sizing: border-box;     /* keeps padding inside width */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.banner-title {
+    color: white;
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.banner-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;            /* lets links drop to next line if needed */
+}
+
+.banner-link {
+    color: #5f8b7b;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    white-space: nowrap;        /* keeps each link on one line */
+}
+
+.banner-spacer {
+    height: 90px; /* slightly bigger in case links wrap */
+}
+
+.content-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #fffaf5;
+    border-radius: 10px;
+}
