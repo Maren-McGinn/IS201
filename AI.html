@@ -42,12 +42,12 @@
     }
 
     .correct {
-        background-color: #538d4e; /* green */
+        background-color: #538d4e;
         border: none;
     }
 
     .present {
-        background-color: #3a7bd5; /* blue */
+        background-color: #3a7bd5;
         border: none;
     }
 
@@ -56,24 +56,22 @@
         border: none;
     }
 
-    input {
-        padding: 10px;
-        font-size: 18px;
-        text-transform: uppercase;
-        width: 200px;
-        text-align: center;
-    }
-
-    button {
-        padding: 10px 15px;
-        font-size: 16px;
-        margin-left: 10px;
-        cursor: pointer;
-    }
-
     #message {
         margin-top: 15px;
         font-size: 18px;
+    }
+
+    #score {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    #playAgain {
+        margin-top: 15px;
+        padding: 10px 15px;
+        font-size: 16px;
+        display: none;
+        cursor: pointer;
     }
 </style>
 </head>
@@ -81,14 +79,13 @@
 
 <h1>Word Guess Game</h1>
 
+<div id="score">Wins: 0 | Losses: 0</div>
+
 <div id="game"></div>
 
-<div>
-    <input id="guessInput" maxlength="5" placeholder="Enter word" />
-    <button onclick="submitGuess()">Guess</button>
-</div>
-
 <div id="message"></div>
+
+<button id="playAgain" onclick="resetGame()">Play Again</button>
 
 <script>
 const words = [
@@ -97,35 +94,70 @@ const words = [
     "light","sound","dream","plant","water"
 ];
 
-let targetWord = words[Math.floor(Math.random() * words.length)];
-let currentRow = 0;
+let targetWord;
+let currentRow;
+let currentCol;
+let currentGuess;
 const maxRows = 5;
+
+let wins = 0;
+let losses = 0;
 
 // Create board
 const game = document.getElementById("game");
-for (let i = 0; i < maxRows; i++) {
-    let row = document.createElement("div");
-    row.classList.add("row");
 
-    for (let j = 0; j < 5; j++) {
-        let tile = document.createElement("div");
-        tile.classList.add("tile");
-        row.appendChild(tile);
+function buildBoard() {
+    game.innerHTML = "";
+    for (let i = 0; i < maxRows; i++) {
+        let row = document.createElement("div");
+        row.classList.add("row");
+
+        for (let j = 0; j < 5; j++) {
+            let tile = document.createElement("div");
+            tile.classList.add("tile");
+            row.appendChild(tile);
+        }
+
+        game.appendChild(row);
     }
+}
 
-    game.appendChild(row);
+// Keyboard input
+document.addEventListener("keydown", handleKey);
+
+function handleKey(e) {
+    if (currentRow >= maxRows) return;
+
+    if (e.key === "Backspace") {
+        if (currentCol > 0) {
+            currentCol--;
+            currentGuess[currentCol] = "";
+            updateTiles();
+        }
+    } 
+    else if (e.key === "Enter") {
+        if (currentCol === 5) {
+            submitGuess();
+        }
+    } 
+    else if (/^[a-zA-Z]$/.test(e.key)) {
+        if (currentCol < 5) {
+            currentGuess[currentCol] = e.key.toLowerCase();
+            currentCol++;
+            updateTiles();
+        }
+    }
+}
+
+function updateTiles() {
+    const row = game.children[currentRow];
+    for (let i = 0; i < 5; i++) {
+        row.children[i].textContent = currentGuess[i];
+    }
 }
 
 function submitGuess() {
-    const input = document.getElementById("guessInput");
-    const guess = input.value.toLowerCase();
-
-    if (guess.length !== 5) {
-        setMessage("Enter a 5-letter word.");
-        return;
-    }
-
-    if (currentRow >= maxRows) return;
+    const guess = currentGuess.join("");
 
     const row = game.children[currentRow];
     const tiles = row.children;
@@ -133,10 +165,8 @@ function submitGuess() {
     let targetArray = targetWord.split("");
     let guessArray = guess.split("");
 
-    // First pass: correct positions
+    // First pass
     for (let i = 0; i < 5; i++) {
-        tiles[i].textContent = guess[i];
-
         if (guess[i] === targetWord[i]) {
             tiles[i].classList.add("correct");
             targetArray[i] = null;
@@ -144,7 +174,7 @@ function submitGuess() {
         }
     }
 
-    // Second pass: correct letters wrong position
+    // Second pass
     for (let i = 0; i < 5; i++) {
         if (guessArray[i]) {
             let index = targetArray.indexOf(guessArray[i]);
@@ -158,18 +188,28 @@ function submitGuess() {
     }
 
     if (guess === targetWord) {
+        wins++;
+        updateScore();
         setMessage("🎉 You got it!");
         endGame();
         return;
     }
 
     currentRow++;
-    input.value = "";
+    currentCol = 0;
+    currentGuess = ["", "", "", "", ""];
 
     if (currentRow === maxRows) {
+        losses++;
+        updateScore();
         setMessage("Game over! Word was: " + targetWord.toUpperCase());
         endGame();
     }
+}
+
+function updateScore() {
+    document.getElementById("score").textContent =
+        `Wins: ${wins} | Losses: ${losses}`;
 }
 
 function setMessage(msg) {
@@ -177,8 +217,22 @@ function setMessage(msg) {
 }
 
 function endGame() {
-    document.getElementById("guessInput").disabled = true;
+    document.getElementById("playAgain").style.display = "inline-block";
 }
+
+function resetGame() {
+    targetWord = words[Math.floor(Math.random() * words.length)];
+    currentRow = 0;
+    currentCol = 0;
+    currentGuess = ["", "", "", "", ""];
+
+    buildBoard();
+    setMessage("");
+    document.getElementById("playAgain").style.display = "none";
+}
+
+// Initialize game
+resetGame();
 </script>
 
 </body>
